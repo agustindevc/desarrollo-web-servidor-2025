@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva categoria</title>
+    <link rel="stylesheet" href="../estilo.css">
+    <?php require '../util/conexion.php'; ?>
+    <?php
+        error_reporting( E_ALL );
+        ini_set("display_errors", 1 );  
+
+        //controlo que la sesion este iniciada
+        /*session_start();
+        if(isset($_SESSION["usuario"])){
+            echo"<h2>Bienvenido " . $_SESSION["usuario"] . "</h2>";
+        } else {
+            header("location: usuario/iniciar_sesion.php");
+            exit;
+        }*/
+    ?>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Nueva Categoría</h1>
+
+        <?php
+        if($_SERVER["REQUEST_METHOD"] == "POST"){
+            $tmp_categoria = $_POST["categoria"];
+            $tmp_descripcion = $_POST["descripcion"];
+    
+        //Validacion de datos de categoria.
+        if($tmp_categoria == ""){
+            $err_categoria = "debes ingresar una categoria.";
+        }else{
+            //controlo que el formato sea el correcto.
+            $patron = "/^[A-Za-z\s]{2,30}$/";
+            if(!preg_match($patron,$tmp_categoria)){
+                $err_categoria = "La categoria solo puede tener letras o espacios en blanco, mino 2 caracteres y maximo 30.";
+            }else{
+                 //compruebo si la categoria ya existe o no
+                 $existe = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
+                 $resultado = $_conexion -> query($existe);
+                 if($resultado -> num_rows > 0){
+                     $err_categoria = "La categoria ya existe.";
+                 }else{
+                    //si todo el correcto, asigno el valor a la variable final
+                    $categoria = $tmp_categoria;
+                 }
+               
+            }
+        }
+
+        //Validacion de catos de descripcion.
+        if($tmp_descripcion == ""){
+            $err_descripcion = "La descripcion es obligatoria.";
+        }else{
+            //controlo que el formato sea el correcto.
+            $patron = "/^.{0,255}$/";
+            if(!preg_match($patron,$tmp_descripcion)){
+                $err_descripcion = "La descripcion no puede tener mas de 255 caracteres.";
+            }else{
+                //si todo el correcto, asigno el valor a la variable final
+                $descripcion = $tmp_descripcion;
+            }
+
+        }
+
+    }
+        //Si los nuevos datos son correctos, los inserto en la base de datos.
+        if(isset($categoria) && isset($descripcion)){
+            $sql = "INSERT INTO categorias (categoria, descripcion)
+                VALUES ('$categoria', '$descripcion')";
+
+                $_conexion -> query($sql);
+        }
+        ?>
+
+        <form action="" method="post" enctype="multipart/form-data"> 
+            <div class="mb-3">
+                <label class="form-label">Categoría</label>
+                <input class="form-control" type="text" name="categoria">
+                <?php if(isset($err_categoria)) echo"<h1>$err_categoria</h1>"?>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" rows="4"></textarea>
+                <?php if(isset($err_descripcion)) echo"<h1>$err_descripcion</h1>"?>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-primary" type="submit" value="Insertar">
+                <a class="btn btn-secondary" href="index.php">Volver</a>
+            </div>
+        </form>
+    </div>
+    </body>
+</html>
