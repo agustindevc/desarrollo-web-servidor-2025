@@ -30,15 +30,25 @@
                 $id_anime = $_POST["id_anime"]; 
                 echo "<h1>$id_anime</h1>";
                 
-                $sql = "DELETE FROM animes WHERE id_anime = $id_anime";
-                $_conexion ->query($sql); 
+                //1- (prepared statement)
+                $sql = $_conexion -> prepare("DELETE FROM animes WHERE id_anime = ?");
+                
+
+                //2-enlazado (binding)
+                $sql -> bind_param("i",
+                $id_anime);
+
+                //3- ejecucion
+                $sql -> execute();
             }
+
             $sql = "SELECT * FROM animes";
             $resultado = $_conexion -> query($sql); /*La funcion query aplicada a la conexion 
                                                     ejecuta la sentencia SQL Hecha, en dicha conexion 
                                                     y la almacena en un objeto llamado en este caso $resuñtado*/
             
-
+            //cierro la base de datos
+            $_conexion -> close();
         ?>
 
         <a class= "btn btn-secondary" href="nuevo_anime.php">Crear Nuevo Anime</a><br><br>

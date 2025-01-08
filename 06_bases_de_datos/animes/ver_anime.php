@@ -11,13 +11,13 @@
         ini_set("display_errors", 1 );  
 
         //controlo que la sesion este iniciada
-        session_start(); //colocamos esto para recuperar la sesion
+        /*session_start(); //colocamos esto para recuperar la sesion
         if(isset($_SESSION["usuario"])){
             echo"<h2>Bienvenido " . $_SESION["usuario"] . "</h2>";
         } else {
             header("location: usuario/iniciar_sesion.php"); //averiguar bien que hace este codigo
             exit;
-        }
+        }*/
     ?>
     <style>
         .error {
@@ -32,6 +32,8 @@
         echo "<h1>" . $_GET["id_anime"] . "</h1>"; //trae mediante el get y muestra la id del anime que estyoy editando
 
         $id_anime = $_GET["id_anime"]; //traigo el id del anime y lo almaceno en la variable
+
+
         $sql = "SELECT * FROM animes WHERE id_anime = $id_anime"; //cogemos la informacion del anime que contenga esa id
         $resultado = $_conexion -> query($sql); //almaceno la informacion en la variable resultado.
   
@@ -45,8 +47,21 @@
         }
 
         //como obtener un dato especifico de la tabla para mostrarlo o utilizarlo como necesite. en neste caso, apra crear un select con todos los nombre de estudio que hayaa en la tabla
+        
+        /* QUERY ANTIGUA, SIN PREPARACION.
         $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
         $resultado = $_conexion -> query($sql);
+        */
+
+        //1-Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM estudios ORDER BY ?");
+        //2-Bind
+        $sql -> bind_param("s",$nombre_estudio);
+        //Execute
+        $sql -> execute();
+        //4-Retrieve
+        $resultado = $sql -> get_result();
+
 
         $estudios = []; //Aqui se añadiran los nombres de los estudios que se encuentren en la base de datos
         
@@ -63,17 +78,25 @@
             $num_temporadas = $_POST["num_temporadas"];
 
             //MODIFICAMOS EL ANIME EN LA BASE DE DATOS CON LOS NUEVOS CAMPOS
-            $sql = "UPDATE animes SET
-                titulo = '$titulo',
-                nombre_estudio = '$nombre_estudio',
-                anno_estreno = $anno_estreno,
-                num_temporadas = $num_temporadas
-                WHERE id_anime = $id_anime
-                ";
+            //1-preparacion
+            $sql = $_conexion -> prepare("UPDATE animes SET titulo = ?, nombre_estudio = ?, anno_estreno = ?, num_temporadas = ?
+            WHERE id_anime = ?");
 
-                $_conexion -> query($sql);
+            //2-binding
+            $sql -> bind_param("ssiii",
+            $titulo,
+            $nombre_estudio,
+            $anno_estreno,
+            $num_temporadas,
+            $id_anime);
+            
+            //3-Ejecucion
+            $sql -> execute();            
         }
         
+        //cierro la base de datos
+        $_conexion -> close();
+
         ?>
 
         <form action="" method="post" enctype="multipart/form-data"> <!--Se agrega el enctype para que pueda leer imagenes?? -->

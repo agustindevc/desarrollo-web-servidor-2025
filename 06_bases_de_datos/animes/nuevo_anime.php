@@ -11,13 +11,13 @@
         ini_set("display_errors", 1 );  
 
         //controlo que la sesion este iniciada
-        session_start(); //colocamos esto para recuperar la sesion
+        /*session_start(); //colocamos esto para recuperar la sesion
         if(isset($_SESSION["usuario"])){
             echo"<h2>Bienvenido " . $_SESION["usuario"] . "</h2>";
         } else {
             header("location: usuario/iniciar_sesion.php"); //averiguar bien que hace este codigo
             exit;
-        }
+        }*/
     ?>
     <style>
         .error {
@@ -43,15 +43,42 @@
 
             //var_dump($_FILES["imagen"]);
 
+            /*
             $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen)
                 VALUES ('$titulo', '$nombre_estudio', $anno_estreno, $num_temporadas, '$ubicacion_final')";
 
-                $_conexion -> query($sql); //indico donde debe guardarse
+                $_conexion -> query($sql); //indico donde debe guardarse.
+            */
+
+            //Las tres etapas de las prepared statements (Preparacion, ENlazado (binding). Ejecucion).
+
+            //1-Preparacion
+            $sql = $_conexion -> prepare("INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen)
+                VALUES (?,?,?,?,?)");
+
+            //2-Enlazado
+            $sql -> bind_param("ssiis",
+            $titulo,
+            $nombre_estudio,
+            $anno_estreno,
+            $num_temporadas,
+            $ubicacion_final); //se debe indicar el tipo de dato que se ingresara, EN ORDEN: s (strig), i(int)...
+        
+            //3-Ejecución
+            $sql -> execute();
+
+            
+
         }
 
         //como obtener un dato especifico de la tabla para mostrarlo o utilizarlo como necesite. en neste caso, apra crear un select con todos los nombre de estudio que hayaa en la tabla
         $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
         $resultado = $_conexion -> query($sql);
+
+
+        //cierro la base de datos
+        $_conexion -> close();
+
 
         $estudios = []; //Aqui se añadiran los nombres de los estudios que se encuentren en la base de datos
         
