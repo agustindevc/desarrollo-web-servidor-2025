@@ -17,7 +17,8 @@
         } else {
             header("location: usuario/iniciar_sesion.php"); //averiguar bien que hace este codigo
             exit;
-        }*/
+        }
+        */
     ?>
     <style>
         .error {
@@ -34,10 +35,19 @@
         $id_anime = $_GET["id_anime"]; //traigo el id del anime y lo almaceno en la variable
 
 
-        $sql = "SELECT * FROM animes WHERE id_anime = $id_anime"; //cogemos la informacion del anime que contenga esa id
-        $resultado = $_conexion -> query($sql); //almaceno la informacion en la variable resultado.
-  
-       
+        //1-Prepare statement.
+        $sql = $_conexion -> prepare("SELECT * FROM animes WHERE id_anime = ?"); //cogemos la informacion del anime que contenga esa id
+
+        //2-Enlazado (Binding)
+        $sql -> bind_param("i",$id_anime);
+
+        //3-Execute
+        $sql = execute();
+
+        //4-Retrieve
+        $resultado = $sql -> get_result();
+        
+         
         while($fila = $resultado -> fetch_assoc()){ //estructura para separar la informacion en variables
             $titulo = $fila["titulo"];
             $nombre_estudio = $fila["nombre_estudio"];

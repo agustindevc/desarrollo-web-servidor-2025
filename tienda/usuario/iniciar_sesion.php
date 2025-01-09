@@ -38,11 +38,11 @@
                 $datos_usuario = $resultado -> fetch_assoc();
             
                 //si los datos coinciden, se concede el accedo
-                $acceso_concedido = password_verify($contrasenia,$datos_usuario["contrasenia"]);
+                $acceso_concedido = password_verify($contrasena,$datos_usuario["contrasena"]);
                 if($acceso_concedido) {
                     session_start();
                     $_SESSION["usuario"] = $usuario;
-                    header("location: ../index.php"); //al iniciar sesion, manda al index.php
+                    header("location: ../util/index.php"); //al iniciar sesion, manda al index.php
                     exit;
                 } else {
                     echo "<h2>La contraseña es incorrecta</h2>";
@@ -59,7 +59,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
-                <input class="form-control" type="password" name="contrasenia">
+                <input class="form-control" type="password" name="contrasena">
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Iniciar Sesion">

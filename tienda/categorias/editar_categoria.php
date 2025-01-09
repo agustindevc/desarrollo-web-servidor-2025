@@ -31,8 +31,17 @@
         <h1>Editar categoria</h1>
         <?php
         $categoria = $_GET["categoria"]; //traigo el id de la categoria que estoy editando y lo almaceno en la variable.
-        $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'"; //cogemos la informacion de la categoria que contenga esa id.
-        $resultado = $_conexion -> query($sql); //almaceno la informacion en la variable resultado.
+
+        //1-Prepares statement
+        $sql = $_conexion -> prepare("SELECT * FROM categorias WHERE categoria = ?"); //cogemos la informacion de la categoria que contenga esa id.
+        
+        //2-binding
+        $sql -> bind_param("s",$categoria);
+
+        //03-ejecucion
+        $sql -> execute();
+        
+        $resultado = $sql -> get_result(); //almaceno la informacion en la variable resultado.
   
        
         while($fila = $resultado -> fetch_assoc()){ //estructura para separar la informacion en variables.
@@ -65,12 +74,18 @@
 
         //Modificacion de la categoria en la base de datos
         if(isset($categoria) && isset($descripcion)){
-            $sql = "UPDATE categorias SET
-                descripcion = '$descripcion'
-                WHERE categoria = '$categoria'
-                ";
 
-                $_conexion -> query($sql);
+            //1-prepared statement
+            $sql = $_conexion -> prepare("UPDATE categorias SET
+                descripcion = ?
+                WHERE categoria = ?
+                ");
+
+            //2-binding
+            $sql -> bind_param("ss", $descripcion, $categoria);
+
+            //3-ejecucion
+            $sql -> execute();
         }
     }
 
