@@ -75,10 +75,16 @@
     }
         //Si los nuevos datos son correctos, los inserto en la base de datos.
         if(isset($categoria) && isset($descripcion)){
-            $sql = "INSERT INTO categorias (categoria, descripcion)
-                VALUES ('$categoria', '$descripcion')";
+            
+            //1-Prepared Statement
+            $sql = $_conexion -> prepare("INSERT INTO categorias (categoria, descripcion)
+                VALUES (?,?)");
 
-                $_conexion -> query($sql);
+            //2-Binding
+            $sql = bind_param("ss", $categoria, $descripcion);
+
+            //3-Ejecucion
+            $sql -> execute();
         }
         ?>
 

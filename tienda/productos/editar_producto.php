@@ -114,14 +114,16 @@
 
             //MODIFICAMOS EL PRODUCTO EN LA BASE DE DATOS CON LOS NUEVOS CAMPOS
             if(isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)){
-            $sql = "UPDATE productos SET
-                nombre = '$nombre',
-                precio = '$precio',
-                categoria = '$categoria',
-                stock = '$stock',
-                descripcion = '$descripcion'
-                WHERE id_producto = '$id_producto'
-                ";
+            
+            //1-Prepares Statement continuar aqui...
+            $sql =  $conexion -> prepare("UPDATE productos SET
+                nombre = ?,
+                precio = ?,
+                categoria = ?,
+                stock = ?,
+                descripcion = ?
+                WHERE id_producto = ?
+                ");
 
                 $_conexion -> query($sql);
             }
