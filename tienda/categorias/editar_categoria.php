@@ -40,7 +40,8 @@
 
         //03-ejecucion
         $sql -> execute();
-        
+
+        //4-retrieve        
         $resultado = $sql -> get_result(); //almaceno la informacion en la variable resultado.
   
        

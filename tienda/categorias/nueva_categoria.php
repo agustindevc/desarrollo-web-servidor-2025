@@ -81,7 +81,7 @@
                 VALUES (?,?)");
 
             //2-Binding
-            $sql = bind_param("ss", $categoria, $descripcion);
+            $sql -> bind_param("ss", $categoria, $descripcion);
 
             //3-Ejecucion
             $sql -> execute();

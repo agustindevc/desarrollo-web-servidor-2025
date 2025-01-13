@@ -101,26 +101,46 @@
 
             }
                 
-            
+        } 
             //Si todos los datos son correctos, inserto los valroes en la base de datos
             if(isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)){
-                $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
-                VALUES ('$nombre', $precio, '$categoria', $stock, '$ubicacion_final', '$descripcion')";
+                
+                //1-Preparacion
+                $sql = $_conexion -> prepare("INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+                VALUES (?, ?, ?, ?, ?, ?)");
 
-                $_conexion -> query($sql);
-            }
+                //2-Binding
+                $sql -> bind_param("sisiss", $nombre, $precio, $categoria, $stock, $imagen, $descripcion);
+
+                //3-Ejecucion
+                $sql -> execute();
+
+                
         }
 
         //Creacion de un array para almacenar las categorias que hay en la Base de datos para mostrarlas en el select
-        $sql = "SELECT * FROM categorias ORDER BY categoria";
-        $resultado = $_conexion -> query($sql);
+        
+        
+        //1-Preparacion
+        $sql = $_conexion -> prepare("SELECT * FROM categorias ORDER BY ?");
+
+        //2-Binding
+        $sql -> bind_param("s", $categoria);
+
+        //3-Ejecucion
+        $sql -> execute();
+
+        //4-Retrieve
+        $resultado = $sql -> get_result();
+        
         $categorias = [];
+    
 
         while($fila = $resultado -> fetch_assoc()) {
             array_push($categorias, $fila["categoria"]);
         }
 
- 
+    
         ?>
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">

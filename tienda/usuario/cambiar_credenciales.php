@@ -38,9 +38,17 @@
             $contrasena = $_POST["contrasena"];
             $nueva_contrasena = $_POST["nueva_contrasena"];
 
-            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'"; //si el usuario existe devuelve una fila con el suario y la contraseña, si no existe devuelve 0 filas
-            $resultado = $_conexion -> query($sql);
-       
+
+            //1-Preparacion
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?"); //si el usuario existe devuelve una fila con el suario y la contraseña, si no existe devuelve 0 filas
+            
+            //2-Binding
+            $sql -> bind_param("i", $usuario);
+
+            //3-ejecucion
+            $sql -> execute();
+            
+            $resultado = $sql -> get_result();
 
             if($resultado -> num_rows == 0) {
                 echo "<h2>El usuario $usuario no existe</h2>";

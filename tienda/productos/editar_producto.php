@@ -115,8 +115,8 @@
             //MODIFICAMOS EL PRODUCTO EN LA BASE DE DATOS CON LOS NUEVOS CAMPOS
             if(isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)){
             
-            //1-Prepares Statement continuar aqui...
-            $sql =  $conexion -> prepare("UPDATE productos SET
+            //1-Prepared statement continuar aqui...
+            $sql =  $_conexion -> prepare("UPDATE productos SET
                 nombre = ?,
                 precio = ?,
                 categoria = ?,
@@ -125,14 +125,34 @@
                 WHERE id_producto = ?
                 ");
 
-                $_conexion -> query($sql);
-            }
+            //2-binding
+            $sql -> bind_param("sisisi", $nombre, $precio, $categoria, $stock, $descripcion, $id_producto);
+
+            //3-ejecucion
+            $sql -> execute();
+                
         }
+    }
 
         //Creacion de un array para almacenar las categorias que hay en la Base de datos, para mostrarlas en el select.
-        $sql = "SELECT * FROM categorias ORDER BY categoria";
-        $resultado = $_conexion -> query($sql);
+
+        //1-Preparacion
+        $sql = $_conexion -> prepare("SELECT * FROM categorias ORDER BY ?");
+
+        //2-Binding
+        $sql -> bind_param("s", $categoria);
+
+        //3-Ejecucion
+        $sql -> execute();
+
+        //4-retrieve
+        $resultado = $sql -> get_result();
+
+
+
         $categorias = [];
+
+
 
         while($fila = $resultado -> fetch_assoc()) {
             array_push($categorias, $fila["categoria"]);

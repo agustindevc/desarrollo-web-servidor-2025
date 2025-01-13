@@ -28,8 +28,19 @@
             $usuario = $_POST["usuario"];
             $contrasena = $_POST["contrasena"];
 
-            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'"; //si el usuario existe devuelve una fila con el suario y la contraseña, si noe xiste devuelve 0 filas
-            $resultado = $_conexion -> query($sql);
+
+            //1-Preparacion
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?"); //si el usuario existe devuelve una fila con el suario y la contraseña, si noe xiste devuelve 0 filas
+            
+            //2-binding
+            $sql -> bind_param("s",$usuario);
+            
+            //3-Ejecucion
+            $sql -> execute();
+
+            //4-retrieve
+            $resultado = $sql -> get_result();
+        
        
 
             if($resultado -> num_rows == 0) {
