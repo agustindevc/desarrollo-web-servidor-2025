@@ -29,7 +29,7 @@
     }
 
     function manejarGet($_conexion) {
-        $sql = "SELECT * FROM estudios";
+        $sql = "SELECT * FROM animes";
         $stmt = $_conexion -> prepare($sql);
         $stmt -> execute();
         $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);  #Equivalente al get_result de Mysqlli
@@ -37,21 +37,23 @@
     }
 
     function manejarPost($_conexion, $entrada) {
-        $sql = "INSERT INTO estudios (nombre_estudio, ciudad, anno_fundacion)
-            VALUES (:nombre_estudio, :ciudad, :anno_fundacion)";
+        $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas)
+            VALUES (:titulo, :nombre_estudio, :anno_estreno, :num_temporadas)";
 
         $stmt = $_conexion -> prepare($sql);
 
         //Se insertan los datos en la BD. Los datos vienen del formulario.
         $stmt -> execute([
+            "titulo" => $entrada["titulo"],
             "nombre_estudio" => $entrada["nombre_estudio"],
-            "ciudad" => $entrada["ciudad"],
-            "anno_fundacion" => $entrada["anno_fundacion"]
+            "anno_estreno" => $entrada["anno_estreno"],
+            "num_temporadas" => $entrada["num_temporadas"]
         ]);
+
         if($stmt) {
-            echo json_encode(["mensaje" => "el estudio se ha insertado correctamente"]);
+            echo json_encode(["mensaje" => "el anime se ha insertado correctamente"]);
         } else {
-            echo json_encode(["mensaje" => "error al insertar el estudio"]);
+            echo json_encode(["mensaje" => "error al insertar el anime"]);
         }     
     }
 ?>

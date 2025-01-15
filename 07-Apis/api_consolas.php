@@ -3,7 +3,7 @@
         ini_set("display_errors", 1 );  
 
     header("Content-Type: application/json"); //esta linea devolvera un Json.
-    include("conexion_pdo.php");
+    include("conexion_pdo_consolas.php");
 
     $metodo = $_SERVER["REQUEST_METHOD"]; //Tomamos el metodo con el que se esta haciendo la peticion.
     $entrada = json_decode(file_get_contents('php://input'), true); //almacena en $entrada un array asociativo con los datos. Decodifica el JSon y lo pone en php.
@@ -29,7 +29,7 @@
     }
 
     function manejarGet($_conexion) {
-        $sql = "SELECT * FROM estudios";
+        $sql = "SELECT * FROM consolas";
         $stmt = $_conexion -> prepare($sql);
         $stmt -> execute();
         $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);  #Equivalente al get_result de Mysqlli
@@ -37,21 +37,23 @@
     }
 
     function manejarPost($_conexion, $entrada) {
-        $sql = "INSERT INTO estudios (nombre_estudio, ciudad, anno_fundacion)
-            VALUES (:nombre_estudio, :ciudad, :anno_fundacion)";
+        $sql = "INSERT INTO consolas (nombre, fabricante, generacion, unidades_vendidas)
+            VALUES (:nombre, :fabricante, :generacion, :unidades_vendidas)";
 
         $stmt = $_conexion -> prepare($sql);
 
         //Se insertan los datos en la BD. Los datos vienen del formulario.
         $stmt -> execute([
-            "nombre_estudio" => $entrada["nombre_estudio"],
-            "ciudad" => $entrada["ciudad"],
-            "anno_fundacion" => $entrada["anno_fundacion"]
+            "nombre" => $entrada["nombre"],
+            "fabricante" => $entrada["fabricante"],
+            "generacion" => $entrada["generacion"],
+            "unidades_vendidas" => $entrada["unidades_vendidas"]
         ]);
+
         if($stmt) {
-            echo json_encode(["mensaje" => "el estudio se ha insertado correctamente"]);
+            echo json_encode(["mensaje" => "La consola se ha insertado correctamente"]);
         } else {
-            echo json_encode(["mensaje" => "error al insertar el estudio"]);
+            echo json_encode(["mensaje" => "error al insertar la consola"]);
         }     
     }
 ?>
