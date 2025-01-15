@@ -18,10 +18,10 @@
             manejarPost($_conexion, $entrada);
             break;
         case "PUT":
-            echo json_encode(["metodo" => "put"]);
+            manejarPut($_conexion, $entrada); //UPDATE EN LA QUERY
             break;
         case "DELETE":
-            echo json_encode(["metodo" => "delete"]);
+            manejarDelete($_conexion, $entrada);
             break;
         default:
         echo json_encode(["metodo" => "otro"]);
@@ -53,5 +53,36 @@
         } else {
             echo json_encode(["mensaje" => "error al insertar el estudio"]);
         }     
+    }
+
+    function manejarDelete($_conexion, $entrada){
+        $sql = "DELETE FROM estudios WHERE nombre_estudio = :nombre_estudio";
+        $stmt = $_conexion -> prepare($sql);
+        $stmt -> execute([
+            "nombre_estudio" => $entrada["nombre_estudio"]
+        ]);
+
+        if($stmt) {
+            echo json_encode(["mensaje" => "El estudio se ha borrado correctamente"]);
+        } else {
+            echo json_encode(["mensaje" => "error al borrar la consola"]);
+        }  
+    }
+
+    function manejarPut($_conexion, $entrada){
+        $sql = "UPDATE estudios set nombre_estudio = :nombre_estudio, ciudad = :ciudad, anno_fundacion = :anno_fundacion
+        WHERE nombre_estudio = :nombre_estudio";
+        $stmt = $_conexion -> prepare($sql);
+        $stmt -> execute([
+            "nombre_estudio" => $entrada["nombre_estudio"],
+            "ciudad" => $entrada["ciudad"],
+            "anno_fundacion" => $entrada["anno_fundacion"]
+        ]);
+
+        if($stmt) {
+            echo json_encode(["mensaje" => "El estudio se ha modificado correctamente"]);
+        } else {
+            echo json_encode(["mensaje" => "error al modificar la el estudio"]);
+        }  
     }
 ?>
