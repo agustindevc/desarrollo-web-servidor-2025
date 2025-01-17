@@ -72,7 +72,19 @@
         }
 
         //como obtener un dato especifico de la tabla para mostrarlo o utilizarlo como necesite. en neste caso, apra crear un select con todos los nombre de estudio que hayaa en la tabla
-        $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+        //1-COnexion
+        $sql = $_conexion -> prepared("SELECT * FROM estudios ORDER BY ?");
+
+        //2-binding
+        $sql -> bind_param("i", "nombre_estudio");
+
+        //3-ejecucion
+        $sql -> execute();
+
+        //retrieve
+        $ressultado = $sql -> get_result();
+
+        
         $resultado = $_conexion -> query($sql);
 
 
