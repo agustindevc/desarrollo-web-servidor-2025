@@ -29,9 +29,30 @@
     }
 
     function manejarGet($_conexion) {
-        $sql = "SELECT * FROM estudios";
-        $stmt = $_conexion -> prepare($sql);
-        $stmt -> execute();
+        if(isset($_GET["ciudad"]) && isset($_GET["anno_fundacion"])) {
+            $sql = "SELECT * FROM estudios WHERE ciudad = :ciudad AND anno_fundacion = :anno_fundacion";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "ciudad" => $_GET["ciudad"],
+                "anno_fundacion" => $_GET["anno_fundacion"]
+            ]);
+        } elseif(isset($_GET["anno_fundacion"])) {
+            $sql = "SELECT * FROM estudios WHERE anno_fundacion = :anno_fundacion";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "anno_fundacion" => $_GET["anno_fundacion"]
+            ]);
+        } elseif(isset($_GET["ciudad"])) {
+            $sql = "SELECT * FROM estudios WHERE ciudad = :ciudad";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "ciudad" => $_GET["ciudad"]
+            ]);
+        } else {
+            $sql = "SELECT * FROM estudios";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute();
+        }  
         $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);  #Equivalente al get_result de Mysqlli
         echo json_encode($resultado); //Codifica en JSon el resultado
     }
@@ -70,19 +91,19 @@
     }
 
     function manejarPut($_conexion, $entrada){
-        $sql = "UPDATE estudios set nombre_estudio = :nombre_estudio, ciudad = :ciudad, anno_fundacion = :anno_fundacion
+        $sql = "UPDATE estudios set ciudad = :ciudad, anno_fundacion = :anno_fundacion
         WHERE nombre_estudio = :nombre_estudio";
         $stmt = $_conexion -> prepare($sql);
         $stmt -> execute([
-            "nombre_estudio" => $entrada["nombre_estudio"],
             "ciudad" => $entrada["ciudad"],
-            "anno_fundacion" => $entrada["anno_fundacion"]
+            "anno_fundacion" => $entrada["anno_fundacion"],
+            "nombre_estudio" => $entrada["nombre_estudio"]
         ]);
 
         if($stmt) {
             echo json_encode(["mensaje" => "El estudio se ha modificado correctamente"]);
         } else {
             echo json_encode(["mensaje" => "error al modificar la el estudio"]);
-        }  
+        }
     }
 ?>

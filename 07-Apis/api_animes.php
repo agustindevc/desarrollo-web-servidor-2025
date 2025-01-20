@@ -29,11 +29,36 @@
     }
 
     function manejarGet($_conexion) {
+        if(isset($_GET["nombre_estudio"]) && isset($_GET["anno_estreno"])) {
+            
+            $sql = "SELECT * FROM animes WHERE nombre_estudio = :nombre_estudio AND anno_estreno BETWEEN 2000 AND 2010";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "nombre_estudio" => $_GET["nombre_estudio"],
+                "anno_estreno" => $_GET["anno_estreno"]
+            ]);
+
+        } elseif(isset($_GET["anno_estreno"])) {
+                $sql = "SELECT * FROM animes WHERE anno_estreno BETWEEN 2000 AND 2010";
+                $stmt = $_conexion -> prepare($sql);
+                $stmt -> execute([
+                    "anno_estreno" => $_GET["anno_estreno"]
+                ]);
+
+        } elseif(isset($_GET["nombre_estudio"])) {
+            $sql = "SELECT * FROM animes WHERE nombre_estudio = :nombre_estudio";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "nombre_estudio" => $_GET["nombre_estudio"],
+            ]);
+
+        } else {
         $sql = "SELECT * FROM animes";
         $stmt = $_conexion -> prepare($sql);
         $stmt -> execute();
         $resultado = $stmt -> fetchAll(PDO::FETCH_ASSOC);  #Equivalente al get_result de Mysqlli
         echo json_encode($resultado); //Codifica en JSon el resultado
+        }
     }
 
     function manejarPost($_conexion, $entrada) {
