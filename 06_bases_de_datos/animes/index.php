@@ -46,7 +46,7 @@
             $sql = "SELECT * FROM animes";
             $resultado = $_conexion -> query($sql); /*La funcion query aplicada a la conexion 
                                                     ejecuta la sentencia SQL Hecha, en dicha conexion 
-                                                    y la almacena en un objeto llamado en este caso $resuñtado*/
+                                                    y la almacena en un objeto llamado en este caso $resultado*/
             
             //cierro la base de datos
             $_conexion -> close();
@@ -68,7 +68,7 @@
                 <?php
                     while($fila = $resultado -> fetch_assoc()) { //trata el resultado como un array asociativo
                                                                 //la variable $fila es un array bidimensional que guarda los
-                                                                //resultados de la asociacion, miestras existan filas
+                                                                //resultados de la asociacion, mientras existan filas
                         echo "<tr>";
                         echo "<td>" . $fila["titulo"] . "</td>";
                         echo "<td>" . $fila["nombre_estudio"] . "</td>";
