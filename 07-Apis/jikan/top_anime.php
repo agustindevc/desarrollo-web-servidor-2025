@@ -45,8 +45,11 @@
                         <td>
                             <img width="100px" src="<?php echo $anime["images"]["jpg"]["image_url"]?>">
                         </td>
-                    </tr>
-                <?php } ?>
+                    
+                        <?php } ?>
+                        <?php
+                            foreach($anime["producers"] as $producer) ?>
+                        </tr>
             </tbody>
         </table>
     </div>
