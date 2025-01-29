@@ -9,6 +9,12 @@
 <body>
     <div class="container">
         <?php
+        if(isset($_GET["type"])) {
+            $tipo = $_GET["type"];
+        } else {
+            $tipo = "";
+        }
+
             $apiUrl = "https://api.jikan.moe/v4/top/anime";
 
             $curl = curl_init();
@@ -22,6 +28,19 @@
             //print_r($animes);
         ?>
 
+        <h1>Elige tipo:</h1>
+            <label for="serie">Serie</label>
+            <input type="radio" name="type" value="tv" id="tv"><br>
+            <label for="pelicula">Pélicula</label>
+            <input type="radio" name="type" value="movie" id="pelicula"><br>
+            <label for="todos">Todos</label>
+            <input type="radio" name="type" value="" id="todos">
+
+            <label>
+            <input type="radio" name="type" value="" <?php echo empty($type) ? 'checked' : ''; ?>> Todos
+        </label>
+            <br>
+            <br>
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -33,7 +52,8 @@
             </thead>
             <tbody>
                 <?php
-                foreach($animes as $anime) { ?>
+                foreach($animes as $anime) {
+                    if ($tipo === 'todos' || $anime['type'] === ucfirst($tipo)) { ?>
                     <tr>
                         <td> <?php echo $anime["rank"] ?> </td>
                         <td>
@@ -46,10 +66,8 @@
                             <img width="100px" src="<?php echo $anime["images"]["jpg"]["image_url"]?>">
                         </td>
                     
-                        <?php } ?>
-                        <?php
-                            foreach($anime["producers"] as $producer) ?>
-                        </tr>
+                        <?php } 
+                    } ?>
             </tbody>
         </table>
     </div>
