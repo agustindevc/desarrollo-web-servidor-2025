@@ -74,7 +74,7 @@
         <input type="radio" id="tv" name="type" value="tv" <?php if ($filtroPrincipal == "tv") { echo "checked"; } ?>>
         <label for="tv">Serie </label>
         <input type="radio" id="movie" name="type" value="movie" <?php if ($filtroPrincipal == "movie") { echo "checked"; } ?>>
-        <label for="movie">Película </label>
+        <laulbel for="movie">Película </label>
         <input type="radio" id="todo" name="type" value="" <?php if ($filtroPrincipal == "") { echo "checked"; } ?>>
         <label for="todo">Todo </label><br>
         <input class="btn btn-warning" type="submit" value="Filtrar"><br><br>

@@ -55,7 +55,6 @@
                 <?php
                     // Recorrer el array de razas obtenidas de la API
                     foreach($razas as $raza => $subRazas) { //el valor de subrazas se asigna automaticamente ya que raza es un array de clave-valor (en caso de que haya subrazas
-                        )
                         // Verificar si la raza no tiene subrazas
                         if (empty($subRazas)) { ?>
                             <option value="<?php echo $raza ?>">
@@ -69,7 +68,7 @@
                                 // Formar la clave correcta para la API (ejemplo: bulldog/french)
                                 $api_subRaza = $raza . "/" . $subRaza; ?>
                                 <option value="<?php echo $api_subRaza ?>">
-                                    <?= $mostrar_subRaza ?>
+                                    <?php echo $mostrar_subRaza ?>
                                 </option>
                         <?php }
                         }   
@@ -82,7 +81,7 @@
         <?php
         // Mostrar la imagen si se ha seleccionado una raza
         if (isset($image)) { ?>
-            <img src="<?= $image ?>" class="img-fluid" alt="Imagen de la raza seleccionada">
+            <img src="<?php echo $image ?>" class="img-fluid" alt="Imagen de la raza seleccionada">
         <?php } ?>
     </div>
 </body>
