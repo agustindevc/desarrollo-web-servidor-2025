@@ -21,9 +21,9 @@
             <tbody class="table-group-divider">
                 @foreach($coches as $coche)
                     <tr class='table-primary'>
-                        <td class='table-secondary'>{{ $coche['marca'] }}</td>
-                        <td class='table-secondary'>{{ $coche['modelo'] }}</td>
-                        <td class='table-secondary'>{{ $coche['precio'] }}</td>
+                        <td class='table-secondary'>{{ $coche[0] }}</td>
+                        <td class='table-secondary'>{{ $coche[1] }}</td>
+                        <td class='table-secondary'>{{ $coche[2] }}</td>
                     </tr>
                 @endforeach
             </tbody>

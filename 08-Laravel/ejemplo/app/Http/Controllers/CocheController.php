@@ -8,41 +8,13 @@ class CocheController extends Controller
 {
     public function index () {
             $coches = [
-                [
-                    "marca" => "Mazda",
-                    "modelo" => "RX7",
-                    "precio" => 30000
-                ],
-                [
-                    "marca" => "Mercedes",
-                    "modelo" => "CLA",
-                    "precio" => 35000
-                ],
-                [
-                    "marca" => "Ford",
-                    "modelo" => "Mustang",
-                    "precio" => 40000
-                ],
-                [
-                    "marca" => "Peugeot",
-                    "modelo" => "307 MS",
-                    "precio" => 20000
-                ],
-                [
-                    "marca" => "Fiat",
-                    "modelo" => "Multipla",
-                    "precio" => 15000
-                ],
-                [
-                    "marca" => "Citroen",
-                    "modelo" => "C15",
-                    "precio" => 12000
-                ],
-                [
-                    "marca" => "Mitsubishi",
-                    "modelo" => "Pajero",
-                    "precio" => 25000
-                ]
+                ["Mazda", "RX7", 30000],
+                ["Mercedes", "CLA", 35000],
+                ["Ford", "Mustang", 40000],
+                ["Peugeot", "307 MS", 20000],
+                ["Fiat", "Multipla", 15000],
+                ["Citroen", "C15", 12000],
+                ["Mitsubishi", "Pajero", 25000]
         ];
 
         return view('coches', ['coches' => $coches]);

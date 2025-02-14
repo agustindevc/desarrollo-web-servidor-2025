@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
-            $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->string('marca')->unique(); //la tabla string tendra una columna que se llama marca
+            $table->integer('ano_fundacion');
+            $table->string('pais');
             $table->timestamps();
         });
     }
